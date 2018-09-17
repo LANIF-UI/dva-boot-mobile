@@ -1,0 +1,57 @@
+@layout-prefix-cls: ~'antui-layout';
+
+.@{layout-prefix-cls} {
+  display: flex;
+  flex-direction: column;
+  flex: auto;
+
+  &,
+  * {
+    box-sizing: border-box;
+  }
+
+  &.full-layout {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  &-header,
+  &-footer {
+    flex: 0 0 auto;
+  }
+
+  // &-header {
+  // }
+
+  // &-footer {
+  // }
+
+  &-content {
+    flex: auto;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+
+    // introduce iOS style springy scrolling
+    &:before,
+    &:after {
+      content: '';
+      height: 1px;
+      position: absolute;
+      width: 1px;
+    }
+
+    &:before {
+      bottom: -1px;
+    }
+    &:after {
+      top: -1px;
+    }
+  }
+
+  &.full-layout &-content {
+    overflow: auto;
+  }
+}

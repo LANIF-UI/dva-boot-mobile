@@ -1,32 +1,36 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Switch, NavLink, routerRedux } from 'dva/router';
+import { Switch, routerRedux } from 'dva/router';
 import $$ from 'cmn-utils';
+import Layout from 'components/Layout';
 import './styles/basic.less';
+const { Header, Content } = Layout;
 
-@connect()
+@connect(({ global }) => ({ global }))
 export default class BasicLayout extends React.PureComponent {
-  componentDidMount() {
-    if (!$$.getStore('user')) {
-      this.props.dispatch(routerRedux.replace('/user/login'))
+
+  componentWillMount() {
+    // 检查有户是否登录
+    const user = $$.getStore('user');
+    if (!user) {
+      this.props.dispatch(routerRedux.replace('/sign/login'));
+    } else {
     }
   }
-
+  
   render() {
     const { routerData } = this.props;
     const { childRoutes } = routerData;
 
     return (
-      <div className="basic-layout">
-        <nav>
-          <NavLink to="/home" activeClassName="active">Home</NavLink>
-          <NavLink to="/userInfo" activeClassName="active">UserInfo</NavLink>
-          <NavLink to="/user" activeClassName="active">Logout</NavLink>
-        </nav>
-        <Switch>
-          {childRoutes}
-        </Switch>
-      </div>
+      <Layout full className="basic-layout">
+        <Header></Header>
+        <Content>
+          <Switch>
+            {childRoutes}
+          </Switch>
+        </Content>
+      </Layout>
     );
   }
 }

@@ -1,11 +1,12 @@
 import $$, {request} from 'cmn-utils';
+import objectAssign from 'object-assign';
 import PageInfo from './pageHelper/PageInfo';
 import config from '@/config';
 
 const REQUEST = '@request';
 const REQUEST_SUCCESS = '@request_success';
 const REQUEST_ERROR = '@request_error';
- 
+
 /**
  * 封装service中的异步方法，如在model中使用
    const url = '/getPageList';
@@ -44,7 +45,7 @@ export async function asyncRequest(payload) {
       if ($$.isFunction(config.pageHelper.responseFormat)) {
         const newPageInfo = config.pageHelper.responseFormat(resp);
         // 生成新实例，防止新老指向同一个实例问题
-        return Object.assign(new PageInfo(), pageInfo, newPageInfo);
+        return objectAssign(new PageInfo(), pageInfo, newPageInfo);
       }
     })
   } else {
@@ -95,8 +96,10 @@ export default (model) => {
         for (let i = 0; i < _payloads.length; i++) {
           /**
            * valueField: 返回结果将使用valueField字段的值来接收
+           * notice: 弹出通知
+           * actionType: 如果存在actionType, 则表示自已处理reducer,值为 actionType + ('_SUCCESS' | '_ERROR')
            */
-          const {valueField, notice, ...otherPayload} = _payloads[i];
+          const {valueField, notice, actionType, ...otherPayload} = _payloads[i];
 
           try {
             let response = yield call(asyncRequest, otherPayload);
@@ -114,17 +117,20 @@ export default (model) => {
             
             // 如果需要通知功能
             if (notice) {
-              config.notice.success(notice === true ? '操作成功' : notice[0], 'success');
+              config.notice.success(notice === true ? '操作成功' : notice[0]);
             }
 
-            // 准备返回值
-            resultState.success[valueField || '_@fake_'] = response;
+            // 如果存在actionType,则表示自已处理reducer
+            if (actionType) {
+              yield put({
+                type: `${actionType}_SUCCESS`,
+                payload: response
+              });
+            } else {
+              // 准备返回值
+              resultState.success[valueField || '_@fake_'] = response;
+            }
           } catch(e) {
-            // 如果需要通知功能, 转移到config中配置
-            // if (notice) {
-            //   config.notice.error(notice === true ? (e.text || e.message) : notice[1], 'error');
-            // }
-            
             resultState.error['error'] = e;
 
             // 如果需要内部回调
@@ -134,9 +140,9 @@ export default (model) => {
               error(e);
             } 
 
-            // 通知reducer
+            // 通知reducer 如果存在actionType,则表示自已处理reducer
             yield put({
-              type: REQUEST_ERROR,
+              type: actionType ? `${actionType}_ERROR` : REQUEST_ERROR,
               payload: resultState.error
             });
             // 如果出错提前终止

@@ -14,7 +14,7 @@ export default {
   subscriptions: {
     setup({ history, dispatch }) {
       return history.listen(({ pathname }) => {
-        if (pathname === '/user/login') {
+        if (pathname === '/sign/login') {
           $$.removeStore("user");
         }
       });

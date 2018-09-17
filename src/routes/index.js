@@ -4,13 +4,13 @@ import UserLayout from '@/layouts/UserLayout';
 import NotFound from './Pages/404';
 import Login from './Login';
 import Home from './Home';
-import UserInfo from './UserInfo';
+import MachineRoom from './MachineRoom';
 
 const routesConfig = (app) => ([
   {
-    path: '/user',
+    path: '/sign',
     title: '登录',
-    indexRoute: '/user/login',
+    indexRoute: '/sign/login',
     component: UserLayout,
     childRoutes: [
       Login(app),
@@ -23,7 +23,7 @@ const routesConfig = (app) => ([
     indexRoute: '/home',
     childRoutes: [
       Home(app),
-      UserInfo(app),
+      MachineRoom(app),
       NotFound()
     ]
   }

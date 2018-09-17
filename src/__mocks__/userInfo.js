@@ -49,6 +49,28 @@ export default ({fetchMock, delay, mock, toSuccess, toError}) => {
           'phone': /^1[385][1-9]\d{8}/        // 手机号
         }],
       }), 400)
-    }
+    },
+    '/api/user/menu': options => toSuccess([
+      {
+        name: '机房巡检',
+        icon: 'home',
+        path: '/machineRoom',
+      },
+      {
+        name: '设备巡检',
+        icon: 'home',
+        path: '/device',
+      },
+      {
+        name: '巡检日历',
+        icon: 'home',
+        path: '/calender',
+      },
+      {
+        name: '常用联系人',
+        icon: 'home',
+        path: '/contact',
+      },
+    ], 400)
   } 
 }
