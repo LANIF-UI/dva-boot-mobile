@@ -2,9 +2,9 @@ import React from 'react';
 import { connect } from 'dva';
 import Layout from 'components/Layout';
 import BaseComponent from 'components/BaseComponent';
-import InfiniteScroll from 'react-infinite-scroller';
-import { List } from 'antd-mobile';
-const Item = List.Item;
+import DataList from 'components/DataList';
+import PageHelper from '@/utils/pageHelper';
+import $$ from 'cmn-utils';
 const { Content } = Layout;
 
 @connect(({ machineRoom, loading }) => ({
@@ -13,31 +13,13 @@ const { Content } = Layout;
 }))
 export default class extends BaseComponent {
   state = {
-    data: [],
-    loading: false,
-    hasMore: true
+    selectType: null
   };
 
   componentDidMount() {
-    const { dispatch, machineRoom } = this.props;
-    const { pageData } = machineRoom;
-
-    dispatch({
-      type: 'machineRoom/@request',
-      payload: {
-        valueField: 'pageData',
-        url: '/crud/getList',
-        pageInfo: pageData.startPage(1, 20)
-      },
-      success: ({ pageData }) => {
-        this.setState({
-          data: pageData.list
-        })
-      }
-    });
   }
 
-  loadData = (page) => {
+  loadData1 = page => {
     const { dispatch, machineRoom } = this.props;
     const { pageData } = machineRoom;
     const { data } = this.state;
@@ -56,42 +38,35 @@ export default class extends BaseComponent {
       success: ({ pageData }) => {
         this.setState({
           data: data.concat(pageData.list)
-        })
+        });
       }
     });
   };
 
-  render() {
-    const { loading, hasMore, data } = this.state;
+  loadData = pageInfo => {
+    return $$.post('/crud/getList', PageHelper.requestFormat(pageInfo))
+      .then(resp => {
+        return PageHelper.responseFormat(resp);
+      })
+      .catch(e => console.error(e));
+  };
 
+  onChange = item => {
+    console.log(item)
+  }
+
+  render() {
+    const { selectType } = this.state;
     return (
       <Layout full className="machineRoom-page">
         <Content>
-          <InfiniteScroll
-            initialLoad={false}
-            pageStart={0}
-            loadMore={this.loadData}
-            hasMore={hasMore}
-            loader={
-              <div className="loader" key={0}>
-                Loading ...
-              </div>
-            }
-            useWindow={false}
-          >
-            <List renderHeader={() => '机房列表'}>
-              {data.map((item, index) => (
-                <Item
-                  key={index}
-                  thumb="https://zos.alipayobjects.com/rmsportal/UmbJMbWOejVOpxe.png"
-                  onClick={() => {}}
-                  arrow="horizontal"
-                >
-                  {item.deptName}
-                </Item>
-              ))}
-            </List>
-          </InfiniteScroll>
+          <DataList
+            rowKey="id"
+            titleKey="id"
+            selectType={selectType}
+            loadData={this.loadData}
+            onChange={this.onChange}
+          />
         </Content>
       </Layout>
     );

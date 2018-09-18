@@ -7,7 +7,7 @@ export default ({fetchMock, delay, mock, toSuccess, toError}) => {
     '/api/crud/getList': (options) => {
       const body = JSON.parse(options.body);
       const currentPage = body.currentPage;
-      const idbase = (currentPage - 1) * 10 + 1;
+      const idbase = (currentPage - 1) * body.showCount + 1;
       const paramMap = body.paramMap;
       const deptName = paramMap.deptName;
 
@@ -15,7 +15,7 @@ export default ({fetchMock, delay, mock, toSuccess, toError}) => {
         'currentPage': currentPage,
         'showCount': body.showCount,
         'totalResult': 100,
-        'totalPage': 10,
+        'totalPage': 100 / body.showCount,
         [`dataList|${body.showCount}`]: [{
           'id|+1': idbase,
           'deptName': deptName ? deptName : '@cword(3, 5)',      
@@ -30,7 +30,7 @@ export default ({fetchMock, delay, mock, toSuccess, toError}) => {
           }],
           'content': '@csentence',
         }],
-      }), 400)
+      }), 1400)
     },
     '/api/crud/bathDelete': (options) => toSuccess({options}, 400),
     '/api/crud/getWorkEmployee': (options) => mock({

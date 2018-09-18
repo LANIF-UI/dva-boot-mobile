@@ -1,0 +1,92 @@
+@marginStart: 1px;
+@marginEnd: 8px;
+@opacityStart: 1;
+@opacityEnd: 0.1;
+@shadowStart: 0 0 4px rgba(0, 0, 0, 0.3);
+@shadowEnd: 0 0 0 rgba(0, 0, 0, 0.3);
+@duration: 500ms;
+@delay: 150ms;
+@dotSize: 10px;
+
+.antui-datalist {
+  .loading-container {
+    position: fixed;
+    bottom: 6px;
+    width: 100%;
+    text-align: center;
+    .dot {
+      display: inline-block;
+      width: @dotSize;
+      height: @dotSize;
+      background: #f50;
+      vertical-align: middle;
+      border-radius: 100%;
+
+      &.left {
+        margin-left: 5px;
+        animation: dotleftpulse @duration alternate infinite;
+
+        &.one {
+          animation-delay: @delay;
+        }
+
+        &.two {
+          animation-delay: @delay * 2;
+        }
+
+        &.three {
+          animation-delay: @delay * 3;
+        }
+      }
+
+      &.right {
+        margin-right: 5px;
+        animation: dotrightpulse @duration alternate infinite;
+
+        &.one {
+          animation-delay: @delay;
+        }
+
+        &.two {
+          animation-delay: @delay * 2;
+        }
+
+        &.three {
+          animation-delay: @delay * 3;
+        }
+      }
+    }
+    .text {
+      color: #999;
+      margin: 0 5px;
+    }
+  }
+}
+
+@keyframes dotleftpulse {
+  0% {
+    margin-left: @marginStart;
+    opacity: @opacityStart;
+    box-shadow: @shadowStart;
+  }
+  
+  100% {
+    margin-left: @marginEnd;
+    opacity: @opacityEnd;
+    box-shadow: @shadowEnd;
+  }
+}
+
+@keyframes dotrightpulse {
+  0% {
+    margin-right: @marginStart;
+    opacity: @opacityStart;
+    box-shadow: @shadowStart;
+  }
+  
+  100% {
+    margin-right: @marginEnd;
+    opacity: @opacityEnd;
+    box-shadow: @shadowEnd;
+  }
+}
