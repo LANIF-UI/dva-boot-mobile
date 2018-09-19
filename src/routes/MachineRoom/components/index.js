@@ -2,10 +2,16 @@ import React from 'react';
 import { connect } from 'dva';
 import Layout from 'components/Layout';
 import BaseComponent from 'components/BaseComponent';
+import SearchBox from 'components/SearchBox';
 import DataList from 'components/DataList';
 import PageHelper from '@/utils/pageHelper';
 import $$ from 'cmn-utils';
-const { Content } = Layout;
+import columns from './columns';
+import { Button } from 'antd-mobile';
+import cx from 'classnames';
+import './index.less';
+import Icon from 'components/Icon';
+const { Header, Content } = Layout;
 
 @connect(({ machineRoom, loading }) => ({
   machineRoom,
@@ -16,32 +22,7 @@ export default class extends BaseComponent {
     selectType: null
   };
 
-  componentDidMount() {
-  }
-
-  loadData1 = page => {
-    const { dispatch, machineRoom } = this.props;
-    const { pageData } = machineRoom;
-    const { data } = this.state;
-
-    this.setState({
-      loading: true
-    });
-
-    dispatch({
-      type: 'machineRoom/@request',
-      payload: {
-        valueField: 'pageData',
-        url: '/crud/getList',
-        pageInfo: pageData.jumpPage(page)
-      },
-      success: ({ pageData }) => {
-        this.setState({
-          data: data.concat(pageData.list)
-        });
-      }
-    });
-  };
+  componentDidMount() {}
 
   loadData = pageInfo => {
     return $$.post('/crud/getList', PageHelper.requestFormat(pageInfo))
@@ -52,20 +33,48 @@ export default class extends BaseComponent {
   };
 
   onChange = item => {
-    console.log(item)
+    console.log(item);
+  };
+
+  onSearch = values => {
+    console.log(values);
   }
 
   render() {
     const { selectType } = this.state;
     return (
       <Layout full className="machineRoom-page">
+        <Header>
+          <SearchBox columns={columns} onSearch={this.onSearch} />
+        </Header>
         <Content>
           <DataList
             rowKey="id"
-            titleKey="id"
+            titleKey="deptName"
             selectType={selectType}
             loadData={this.loadData}
-            onChange={this.onChange}
+            arrow={false}
+            render={item => (
+              <div className="machine-list-item">
+                {item.status === '0' ? (
+                  <div className="icon warning">异常</div>
+                ) : (
+                  <div className="icon">正常</div>
+                )}
+
+                <div className="title nobr">{item.deptName}</div>
+                <div className="action">
+                  <Button type="primary" onClick={e => {
+                    e.stopPropagation();
+                  }} size="small" inline style={{ marginRight: '4px' }}>
+                    巡检
+                  </Button>
+                  <Button type="ghost" size="small" inline>
+                    设备
+                  </Button>
+                </div>
+              </div>
+            )}
           />
         </Content>
       </Layout>

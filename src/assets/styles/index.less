@@ -6,3 +6,31 @@ html, body, :global(#root) {
   margin: 0;
   padding: 0;
 }
+
+.nobr{
+  display: inline-block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.br{
+  word-break: break-all; 
+  word-wrap:break-word;
+  white-space: normal;
+}
+
+.clearfix {
+  zoom: 1;
+  &:before,
+  &:after {
+    content: ' ';
+    display: table;
+  }
+  &:after {
+    clear: both;
+    visibility: hidden;
+    font-size: 0;
+    height: 0;
+  }
+}

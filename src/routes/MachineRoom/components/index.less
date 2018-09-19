@@ -1,0 +1,30 @@
+.machineRoom-page {
+  .machine-list-item {
+    display: flex;
+    align-items: center;
+    .icon {
+      display: flex;
+      flex: none;
+      color: #6abf47;
+      text-align: center;
+      padding: 0 5px;
+      font-size: .6rem;
+      border: 1px solid;
+      border-radius: 4px;
+      margin-right: 5px;
+      &.warning {
+        color: #f4333c;
+      }
+      > * {
+        vertical-align: middle;
+      }
+    }
+    .action {
+      display: flex;
+      flex: none;
+    }
+    .title {
+      flex: auto;
+    }
+  }
+}

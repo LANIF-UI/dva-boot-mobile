@@ -10,6 +10,8 @@ const CheckboxItem = Checkbox.CheckboxItem;
 const ListItem = List.Item;
 
 class DataList extends Component {
+  static Item = ListItem;
+
   static propTypes = {
     /**
      * 数据源 PageInfo
@@ -71,7 +73,7 @@ class DataList extends Component {
   static defaultProps = {
     dataSource: PageHelper.create(),
     pageStart: 1,
-    pageSize: 50,
+    pageSize: 30,
     rowKey: 'id',
     initialLoad: false,
     useWindow: false
@@ -111,7 +113,7 @@ class DataList extends Component {
     const { loadData, pageSize } = this.props;
     const { dataSource, dataList } = this.state;
 
-    if (pageNum > dataSource.totalPages && pageNum !== 1) {
+    if (pageNum > Math.ceil(dataSource.totalPages) && pageNum !== 1) {
       this.setState({
         hasMore: false,
         loading: false
@@ -144,13 +146,18 @@ class DataList extends Component {
       titleKey,
       selectType,
       onChange,
-      render
+      render,
+      arrow
     } = this.props;
+
     if (renderItem) {
       return renderItem(item);
     } else if (selectType === 'checkbox') {
       return (
-        <CheckboxItem key={item[rowKey]} onChange={() => onChange(item)}>
+        <CheckboxItem
+          key={item[rowKey]}
+          onChange={onChange ? () => onChange(item) : null}
+        >
           {render ? render(item) : item[titleKey]}
         </CheckboxItem>
       );
@@ -159,8 +166,8 @@ class DataList extends Component {
       return (
         <ListItem
           key={item[rowKey]}
-          onClick={() => onChange(item)}
-          arrow="horizontal"
+          onClick={onChange ? () => onChange(item) : null}
+          arrow={arrow === false ? false : 'horizontal'}
         >
           {render ? render(item) : item[titleKey]}
         </ListItem>

@@ -1,0 +1,94 @@
+@import '~antd-mobile/lib/style/themes/default';
+@import '~antd-mobile/lib/style/mixins';
+
+@search-box-prefix-cls: ~'antui-search-box';
+
+.@{search-box-prefix-cls} {
+  & > .top-search-bar {
+    position: relative;
+    z-index: 90;
+  }
+  & > .search-toolbar {
+    position: relative;
+    z-index: 90;
+    .hairline('top');
+    .hairline('bottom');
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    .toolbar__filters {
+      background-color: #fff;
+    }
+    .toolbar__left-section {
+      display: flex;
+      flex: auto;
+      overflow-y: hidden;
+      overflow-x: auto;
+    }
+    .toolbar__right-section {
+      display: flex;
+      flex: none;
+      align-items: center;
+      .dropdown__trigger {
+        position: relative;
+        .hairline('left');
+      }
+      .button {
+        margin-right: 1.1rem;
+      }
+    }
+    .dropdown {
+      list-style-type: none;
+      display: flex;
+      float: left;
+      padding: 0;
+      margin: 0;
+      color: #333;
+      > li {
+        height: 44px;
+        line-height: 44px;
+      }
+      .dropdown__trigger {
+        display: inline-block;
+        padding: 0 2rem 0rem 1rem;
+        transition: background-color 0.2s ease;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        &:after {
+          content: "";
+          display: inline-block;
+          width: 6px;
+          height: 6px;
+          position: relative;
+          top: -2px;
+          right: -1rem;
+          border: none;
+          border-right: 2px solid;
+          border-top: 2px solid;
+          transform: rotate(135deg);
+        }
+        &:active,
+        &.active {
+          color: #2196f3;
+        }
+      }
+    }
+  }
+  .search-box-dropdown {
+    position: absolute;
+    z-index: 90;
+    width: 100%;
+    height: auto !important;
+  }
+  
+  .menu-mask {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.4;
+    z-index: 89;
+  }
+}

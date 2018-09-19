@@ -24,6 +24,7 @@ export default ({fetchMock, delay, mock, toSuccess, toError}) => {
           'type': '@cword(3)',  
           'planBeginTime': '@date',
           'planEndTime': '@date',
+          'status|1': ['0', '1'],
           'workEmployee|1-3': [{
             'key|+1': 1,
             'title': '@cname',
