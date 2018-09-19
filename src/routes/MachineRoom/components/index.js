@@ -8,9 +8,7 @@ import PageHelper from '@/utils/pageHelper';
 import $$ from 'cmn-utils';
 import columns from './columns';
 import { Button } from 'antd-mobile';
-import cx from 'classnames';
 import './index.less';
-import Icon from 'components/Icon';
 const { Header, Content } = Layout;
 
 @connect(({ machineRoom, loading }) => ({
@@ -19,7 +17,8 @@ const { Header, Content } = Layout;
 }))
 export default class extends BaseComponent {
   state = {
-    selectType: null
+    selectType: null,
+    dataSource: PageHelper.create()
   };
 
   componentDidMount() {}
@@ -37,11 +36,13 @@ export default class extends BaseComponent {
   };
 
   onSearch = values => {
-    console.log(values);
+    this.setState({
+      dataSource: PageHelper.create().filter(values).jumpPage(1)
+    })
   }
 
   render() {
-    const { selectType } = this.state;
+    const { selectType, dataSource } = this.state;
     return (
       <Layout full className="machineRoom-page">
         <Header>
@@ -52,6 +53,7 @@ export default class extends BaseComponent {
             rowKey="id"
             titleKey="deptName"
             selectType={selectType}
+            dataSource={dataSource}
             loadData={this.loadData}
             arrow={false}
             render={item => (

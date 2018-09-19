@@ -20,7 +20,7 @@ export default class Home extends BaseComponent {
             data={menu}
             columnNum={4}
             renderItem={(item, index) => (
-              <div>
+              <div className="grid-block">
                 <Icon type={item.icon} />
                 <h4>{item.name}</h4>
               </div>

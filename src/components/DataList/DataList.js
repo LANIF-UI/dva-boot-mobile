@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import InfiniteScroll from 'react-infinite-scroller';
 import { List, Checkbox } from 'antd-mobile';
 import assign from 'object-assign';
-import isEqual from 'react-fast-compare';
 import PageHelper from '@/utils/pageHelper';
 import './style/index.less';
 const CheckboxItem = Checkbox.CheckboxItem;
@@ -98,18 +98,15 @@ class DataList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { dataSource, loadData } = nextProps;
-    if (!isEqual(this.props.dataSource, dataSource)) {
-      const newState = {};
-      if (!loadData && dataSource) {
-        newState.dataSource = dataSource;
-        newState.dataList = this.props.dataList.concat(dataSource.list);
-        this.setState(newState);
+    const { dataSource } = nextProps;
+    if (this.props.dataSource !== dataSource) {
+      if (dataSource) {
+        this.onLoaderMore(1, dataSource.filters, dataSource.sorts, true);
       }
     }
   }
 
-  onLoaderMore = async pageNum => {
+  onLoaderMore = async (pageNum, filters, sorts, isReload) => {
     const { loadData, pageSize } = this.props;
     const { dataSource, dataList } = this.state;
 
@@ -123,18 +120,25 @@ class DataList extends Component {
 
     if (loadData) {
       this.setState({
-        loading: true
+        loading: true,
+        hasMore: true,
       });
 
       const newDataSource = await loadData(
-        dataSource.jumpPage(pageNum, pageSize)
+        dataSource.jumpPage(pageNum, pageSize).filter(filters).sortBy(sorts)
       );
+
+      if (isReload) {
+        this.iscroll.pageLoaded = 1;
+        const element = ReactDOM.findDOMNode(this.iscroll);
+        element.parentNode.scrollTop = 0;
+      }
 
       const mergeDataSource = assign(dataSource, newDataSource);
       this.setState({
         loading: false,
         dataSource: mergeDataSource,
-        dataList: dataList.concat(mergeDataSource.list)
+        dataList: isReload ? mergeDataSource.list : dataList.concat(mergeDataSource.list)
       });
     }
   };
@@ -175,6 +179,10 @@ class DataList extends Component {
     }
   };
 
+  saveThis = node => {
+    this.iscroll = node;
+  }
+
   render() {
     const {
       renderHeader,
@@ -190,7 +198,8 @@ class DataList extends Component {
       useWindow,
       pageStart,
       loadMore: this.onLoaderMore,
-      hasMore: !loading && hasMore
+      hasMore: !loading && hasMore,
+      ref: this.saveThis
     };
 
     return (
