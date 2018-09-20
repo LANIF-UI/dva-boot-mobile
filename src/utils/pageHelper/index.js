@@ -5,8 +5,8 @@ import config from '@/config';
  * 通用分页助手
  */
 export default class　PageHelper {
-  static create = () => {
-    const pageInfo = new PageInfo();
+  static create = (pageNum, pageSize) => {
+    const pageInfo = new PageInfo(pageNum, pageSize);
     return pageInfo;
   }
 

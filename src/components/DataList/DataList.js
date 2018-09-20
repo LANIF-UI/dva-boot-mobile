@@ -71,7 +71,6 @@ class DataList extends Component {
   };
 
   static defaultProps = {
-    dataSource: PageHelper.create(),
     pageStart: 1,
     pageSize: 30,
     rowKey: 'id',
@@ -81,10 +80,13 @@ class DataList extends Component {
 
   constructor(props) {
     super(props);
-    const { dataSource } = props;
+    const { dataSource, pageStart, pageSize } = props;
+
     this.state = {
-      dataList: dataSource.list,
-      dataSource: dataSource,
+      dataList: dataSource ? dataSource.list : [],
+      dataSource:
+        dataSource.startPage(pageStart, pageSize) ||
+        PageHelper.create(pageStart, pageSize),
       loading: false,
       hasMore: true
     };
@@ -93,7 +95,7 @@ class DataList extends Component {
   componentDidMount() {
     const { loadData, initialLoad } = this.props;
     if (!initialLoad && loadData) {
-      this.onLoaderMore(1);
+      this.onLoaderMore();
     }
   }
 
@@ -101,44 +103,40 @@ class DataList extends Component {
     const { dataSource } = nextProps;
     if (this.props.dataSource !== dataSource) {
       if (dataSource) {
-        this.onLoaderMore(1, dataSource.filters, dataSource.sorts, true);
+        this.setState({
+          dataSource
+        }, () => {
+          this.onLoaderMore(true);
+        })
       }
     }
   }
 
-  onLoaderMore = async (pageNum, filters, sorts, isReload) => {
-    const { loadData, pageSize } = this.props;
+  onLoaderMore = async isReload => {
+    const { loadData } = this.props;
     const { dataSource, dataList } = this.state;
-
-    if (pageNum > Math.ceil(dataSource.totalPages) && pageNum !== 1) {
-      this.setState({
-        hasMore: false,
-        loading: false
-      });
-      return;
-    }
 
     if (loadData) {
       this.setState({
         loading: true,
-        hasMore: true,
+        hasMore: true
       });
 
-      const newDataSource = await loadData(
-        dataSource.jumpPage(pageNum, pageSize).filter(filters).sortBy(sorts)
-      );
+      const newDataSource = await loadData(dataSource.nextPage());
 
       if (isReload) {
-        this.iscroll.pageLoaded = 1;
-        const element = ReactDOM.findDOMNode(this.iscroll);
+        const element = ReactDOM.findDOMNode(this);
         element.parentNode.scrollTop = 0;
       }
 
       const mergeDataSource = assign(dataSource, newDataSource);
       this.setState({
         loading: false,
+        hasMore: mergeDataSource.hasNext(),
         dataSource: mergeDataSource,
-        dataList: isReload ? mergeDataSource.list : dataList.concat(mergeDataSource.list)
+        dataList: isReload
+          ? mergeDataSource.list
+          : dataList.concat(mergeDataSource.list)
       });
     }
   };
@@ -179,10 +177,6 @@ class DataList extends Component {
     }
   };
 
-  saveThis = node => {
-    this.iscroll = node;
-  }
-
   render() {
     const {
       renderHeader,
@@ -197,9 +191,8 @@ class DataList extends Component {
       initialLoad,
       useWindow,
       pageStart,
-      loadMore: this.onLoaderMore,
-      hasMore: !loading && hasMore,
-      ref: this.saveThis
+      loadMore: () => this.onLoaderMore(),
+      hasMore: !loading && hasMore
     };
 
     return (

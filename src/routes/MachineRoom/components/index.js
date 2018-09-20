@@ -18,7 +18,7 @@ const { Header, Content } = Layout;
 export default class extends BaseComponent {
   state = {
     selectType: null,
-    dataSource: PageHelper.create()
+    dataSource: PageHelper.create(1, 30)
   };
 
   componentDidMount() {}
@@ -36,8 +36,9 @@ export default class extends BaseComponent {
   };
 
   onSearch = values => {
+    console.log(values)
     this.setState({
-      dataSource: PageHelper.create().filter(values).jumpPage(1)
+      dataSource: PageHelper.create(1, 30).filter(values).jumpPage(1)
     })
   }
 

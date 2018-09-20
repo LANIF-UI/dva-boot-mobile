@@ -35,6 +35,11 @@ export default class PageInfo {
    */
   reasonable = false;
 
+  constructor(pageNum = 1, pageSize = 10) {
+    this.pageNum = pageNum;
+    this.pageSize = pageSize;
+  }
+
   /**
    * 组装分页信息
    * @param {number} pageNum page number, default 1
@@ -58,7 +63,7 @@ export default class PageInfo {
    * @param {number} pageSize page size
    */
   jumpPage(pageNum, pageSize) {
-    if ((pageNum && pageNum <= Math.ceil(this.totalPages)) || pageNum === 1) {
+    if (this.hasNext(pageNum) || pageNum === 1) {
       this.pageNum = pageNum;
       if (pageSize) this.pageSize = pageSize;
     }
@@ -73,7 +78,7 @@ export default class PageInfo {
   filter(q, merge) {
     if ($$.isObject(q)) {
       if (merge) {
-        this.filters = {...this.filters, ...q};
+        this.filters = { ...this.filters, ...q };
       } else {
         this.filters = q;
       }
@@ -93,15 +98,25 @@ export default class PageInfo {
   }
 
   /**
+   * 是否有下一页
+   */
+  hasNext(pageNum) {
+    if (pageNum && pageNum <= Math.ceil(this.totalPages)) {
+      return true;
+    } else if (this.pageNum + 1 <= Math.ceil(this.totalPages)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * 下一页或指定页数
-   * @param {number} pageNum 
+   * @param {number} pageNum
    */
   nextPage(pageNum) {
     if (this.totalPages !== -1) {
-      if (pageNum && pageNum <= Math.ceil(this.totalPages)) {
-        this.pageNum = pageNum;
-      } else if (this.pageNum + 1 <= Math.ceil(this.totalPages)) {
-        this.pageNum ++;
+      if (this.hasNext(pageNum)) {
+        this.pageNum = pageNum || ++this.pageNum;
       }
     } else {
       this.pageNum = this.totalPages;
@@ -115,7 +130,7 @@ export default class PageInfo {
   prevPage() {
     if (this.totalPages !== -1) {
       if (this.pageNum - 1 > 0) {
-        this.pageNum --;
+        this.pageNum--;
       }
     } else {
       this.pageNum = 1;
@@ -137,6 +152,6 @@ export default class PageInfo {
         const newPageInfo = PageHelper.responseFormat(resp);
         return Object.assign(self, newPageInfo);
       }
-    })
+    });
   }
-} 
+}

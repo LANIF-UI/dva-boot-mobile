@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { SearchBar, Menu } from 'antd-mobile';
+import { Menu } from 'antd-mobile';
+import SearchBar from '../SearchBar';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import './style/index.less';
@@ -70,7 +71,8 @@ class SearchBox extends Component {
   };
 
   onSubmit = (value, item) => {
-    const { valueObject, onSearch } = this.state;
+    const { valueObject } = this.state;
+    const { onSearch } = this.props;
     valueObject[item.name] = value === "" ? null : value;
     if (onSearch) {
       onSearch(valueObject);

@@ -1,0 +1,137 @@
+.festui-search-bar{
+  position: relative;
+  padding: 8PX 10PX;
+  display: flex;
+  box-sizing: border-box;
+  background-color: #efeff4;
+  width: 100%;
+
+  &:after,
+  &:before {
+    content: " ";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1PX;
+    color: #d7d6dc
+  }
+
+  &_focusing &__cancel-btn {
+    display: block
+  }
+
+  &_focusing &__label {
+    display: none
+  }
+
+  &__form {
+    position: relative;
+    flex: auto;
+    background-color: #efeff4
+  }
+
+  &__form:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 200%;
+    height: 200%;
+    transform: scale(.5);
+    transform-origin: 0 0;
+    border-radius: 10PX;
+    border: 1PX solid #e6e6ea;
+    box-sizing: border-box;
+    background: #fff
+  }
+
+  &__box {
+    position: relative;
+    padding-left: 30PX;
+    padding-right: 30PX;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 1
+  }
+
+  &__box &__input {
+    padding: 4PX 0;
+    width: 100%;
+    height: 1.42857143em;
+    border: 0;
+    font-size: 14PX;
+    line-height: 1.42857143em;
+    box-sizing: content-box;
+    background: transparent
+  }
+
+  &__box &__input:focus {
+    outline: none
+  }
+
+  &__box .festui-icon-search {
+    position: absolute;
+    left: 8PX;
+    top: 4px;
+    line-height: 28PX;
+  }
+
+  .festui-icon-search {
+    color: #b2b2b2;
+    font-size: 14PX;
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+  }
+
+  &__box .festui-icon-clear {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0 10PX;
+    line-height: 28PX
+  }
+
+  &__label {
+    position: absolute;
+    top: 4PX;
+    right: 1PX;
+    bottom: 1PX;
+    left: 1PX;
+    z-index: 2;
+    border-radius: 3PX;
+    text-align: center;
+    color: #9b9b9b;
+    background: #fff
+  }
+
+  &__label span {
+    display: inline-block;
+    font-size: 14PX;
+    vertical-align: bottom;
+  }
+
+  &__label .festui-icon-search {
+    margin-right: 5PX
+  }
+
+  &__cancel-btn {
+    display: none;
+    margin-left: 10PX;
+    line-height: 28PX;
+    color: #108ee9;
+    white-space: nowrap
+  }
+
+  &__input:not(:valid)~.festui-icon-clear {
+    display: none
+  }
+
+  input[type=search]::-webkit-search-cancel-button,
+  input[type=search]::-webkit-search-decoration,
+  input[type=search]::-webkit-search-results-button,
+  input[type=search]::-webkit-search-results-decoration {
+    display: none
+  }
+}

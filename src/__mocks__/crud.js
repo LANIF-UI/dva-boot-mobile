@@ -10,6 +10,7 @@ export default ({fetchMock, delay, mock, toSuccess, toError}) => {
       const idbase = (currentPage - 1) * body.showCount + 1;
       const paramMap = body.paramMap;
       const deptName = paramMap.deptName;
+      const status = paramMap.status;
 
       return toSuccess(mock({
         'currentPage': currentPage,
@@ -24,7 +25,7 @@ export default ({fetchMock, delay, mock, toSuccess, toError}) => {
           'type': '@cword(3)',  
           'planBeginTime': '@date',
           'planEndTime': '@date',
-          'status|1': ['0', '1'],
+          'status|1': status ? status : ['0', '1'],
           'workEmployee|1-3': [{
             'key|+1': 1,
             'title': '@cname',

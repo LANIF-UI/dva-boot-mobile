@@ -14,7 +14,7 @@ module.exports = function override(config, env) {
   if (env === "development") {
     config = injectBabelPlugin(["dva-hmr"], config);
   } else {
-    config.output.publicPath = "/"; // 实际跟据项目设置
+    config.output.publicPath = "/dva-boot-mobile/"; // 实际跟据项目设置
   }
 
   config = injectBabelPlugin("transform-decorators-legacy", config);
