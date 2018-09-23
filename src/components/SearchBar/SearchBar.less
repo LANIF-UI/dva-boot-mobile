@@ -87,10 +87,18 @@
 
   &__box .festui-icon-clear {
     position: absolute;
-    top: 0;
+    height: 100%;
+    width: 30px;
+    display: flex;
     right: 0;
-    padding: 0 10PX;
-    line-height: 28PX
+    top: 0;
+    justify-content: center;
+    align-items: center;
+    > svg {
+      color: #b2b2b2;
+      width: 16px;
+      height: 16px;
+    }
   }
 
   &__label {

@@ -107,7 +107,9 @@ class SearchBar extends React.Component {
               onChange={this.changeHandle}
               value={this.state.text}
             />
-            <a className="festui-icon-clear" onClick={this.clearHandle} />
+            <a className="festui-icon-clear" onClick={this.clearHandle}>
+              <Icon type="cross-circle-o" size="small" antd />
+            </a>
           </div>
           <label
             className="festui-search-bar__label"

@@ -27,6 +27,7 @@
     "dva": "^2.4.0",
     "dva-loading": "^2.0.5",
     "object.omit": "^3.0.0",
+    "rc-form": "^2.2.3",
     "react": "^16.2.0",
     "react-document-title": "^2.0.3",
     "react-dom": "^16.2.0",
