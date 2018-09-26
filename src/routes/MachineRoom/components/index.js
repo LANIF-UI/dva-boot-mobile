@@ -4,12 +4,14 @@ import Layout from 'components/Layout';
 import BaseComponent from 'components/BaseComponent';
 import SearchBox from 'components/SearchBox';
 import DataList from 'components/DataList';
+import PageForm from 'components/Pages/PageForm';
 import PageHelper from '@/utils/pageHelper';
 import $$ from 'cmn-utils';
 import columns from './columns';
 import { Button } from 'antd-mobile';
 import './index.less';
 const { Header, Content } = Layout;
+const { Oper } = DataList;
 
 @connect(({ machineRoom, loading }) => ({
   machineRoom,
@@ -18,7 +20,8 @@ const { Header, Content } = Layout;
 export default class extends BaseComponent {
   state = {
     selectType: null,
-    dataSource: PageHelper.create(1, 30)
+    dataSource: PageHelper.create(1, 30),
+    visible: false
   };
 
   componentDidMount() {}
@@ -36,14 +39,58 @@ export default class extends BaseComponent {
   };
 
   onSearch = values => {
-    console.log(values)
+    console.log(values);
     this.setState({
-      dataSource: PageHelper.create(1, 30).filter(values).jumpPage(1)
-    })
-  }
+      dataSource: PageHelper.create(1, 30)
+        .filter(values)
+        .jumpPage(1)
+    });
+  };
+
+  onSubmit = values => {};
+
+  onCheck = record => {
+    this.setState({
+      record,
+      visible: true
+    });
+  };
 
   render() {
-    const { selectType, dataSource } = this.state;
+    const { machineRoom, dispatch } = this.props;
+    const { selectType, dataSource, visible } = this.state;
+    const { record } = this.state;
+    const pageFormProps = {
+      title: '机房巡检',
+      record,
+      columns,
+      onCancel: () => {
+        this.setState({
+          record: null,
+          visible: false
+        });
+      },
+      onSubmit: values => {
+        console.log(values);
+        dispatch({
+          type: 'machineRoom/@request',
+          payload: [
+            {
+              notice: true,
+              url: '/crud/save',
+              data: values
+            }
+          ],
+          success: () => {
+            this.setState({
+              record: null,
+              visible: false,
+            });
+          }
+        });
+      }
+    };
+
     return (
       <Layout full className="machineRoom-page">
         <Header>
@@ -66,20 +113,24 @@ export default class extends BaseComponent {
                 )}
 
                 <div className="title nobr">{item.deptName}</div>
-                <div className="action">
-                  <Button type="primary" onClick={e => {
-                    e.stopPropagation();
-                  }} size="small" inline style={{ marginRight: '4px' }}>
+                <Oper>
+                  <Button
+                    type="primary"
+                    size="small"
+                    inline
+                    onClick={e => this.onCheck(item)}
+                  >
                     巡检
                   </Button>
                   <Button type="ghost" size="small" inline>
                     设备
                   </Button>
-                </div>
+                </Oper>
               </div>
             )}
           />
         </Content>
+        {visible && <PageForm {...pageFormProps} />}
       </Layout>
     );
   }

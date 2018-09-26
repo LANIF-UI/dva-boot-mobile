@@ -28,4 +28,55 @@ export default [
       type: 'select'
     },
   },
+  {
+    name: 'machineRoomCID',
+    formItem: {
+      type: 'hidden'
+    }
+  },
+  {
+    name: 'machineRoomId',
+    formItem: {
+      type: 'hidden'
+    }
+  },
+  {
+    title: '机房情况',
+    formItem: {
+      type: 'line'
+    }
+  },
+  {
+    title: '清洁情况',
+    name: 'cleanStatus',
+    formItem: {
+      required: true,
+    }
+  },
+  {
+    title: '痕迹情况',
+    name: 'traceStatus',
+    formItem: {}
+  },
+  {
+    title: '异响情况',
+    name: 'soundStatus',
+    formItem: {}
+  },
+  {
+    title: '异味情况',
+    name: 'smellStatus',
+    formItem: {}
+  },
+  {
+    title: '巡检状态',
+    name: 'machineRoomCStatus',
+    dict: [
+      {code: '1070001', codeName: '正常'},
+      {code: '1070002', codeName: '异常'},
+    ],
+    formItem: {
+      type: 'select'
+    }
+  },
 ];

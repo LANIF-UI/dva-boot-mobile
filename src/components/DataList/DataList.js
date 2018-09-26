@@ -221,3 +221,12 @@ const Loading = () => (
     </div>
   </div>
 );
+/**
+ * 操作区 阻止向上冒泡
+ */
+const Oper = (prop) => (
+  <div className="datalist-row-button" onClick={e => e.stopPropagation()}>
+    {prop.children}
+  </div>
+);
+DataList.Oper = Oper;

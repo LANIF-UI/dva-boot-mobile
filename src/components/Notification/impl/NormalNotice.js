@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import $$ from 'cmn-utils';
-import Notification from './Notification';
-import './normal.less';
+import Notification from '../Notification';
+import '../style/normal.less';
 const SHOW_NOTICE = 'SHOW_NOTICE';
 const HIDE_NOTICE = 'HIDE_NOTICE';
 
@@ -137,6 +137,10 @@ export default class extends Notification {
         'warn'
       );
     }
+  }
+
+  static loading() {
+    
   }
 
   static close(key) {

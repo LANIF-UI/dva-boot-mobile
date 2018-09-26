@@ -1,10 +1,10 @@
 import React from 'react';
 import PageLoading from 'components/Loading/PageLoading';
-import { normal } from 'components/Notification';
+import { normal, antdNotice } from 'components/Notification';
 import store from 'cmn-utils/lib/store';
 
 // 系统通知, 定义使用什么风格的通知，normal或antdNotice
-const notice = normal;
+export const notice = antdNotice;
 
 export const pluginsId = 'plugins.sp_scan';
 export const pluginsType = 'phone';

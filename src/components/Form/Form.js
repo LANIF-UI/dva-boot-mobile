@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'antd-mobile';
+import { List } from 'antd-mobile';
 import { createForm } from 'rc-form';
+import { splitColumns } from './util';
 import './style/index.less';
 
 /**
@@ -53,7 +54,7 @@ class FormComp extends React.Component {
   };
 
   static defaultProps = {
-    prefixCls: 'antui-form',
+    prefixCls: 'antui-mobile-form',
     loading: false
   };
 
@@ -71,8 +72,39 @@ class FormComp extends React.Component {
     });
   };
 
+  renderFormList = formFields => {
+    const { form, record, preview } = this.props;
+    return splitColumns(formFields).map((section, index) => {
+      const { header, footer, body } = section;
+
+      const listProps = {};
+      if (header) listProps.renderHeader = _ => header;
+      if (footer) listProps.renderFooter = _ => footer;
+
+      return (
+        <List key={`section-${index}`} {...listProps}>
+          {body.map((field, key) => {
+            const { type = 'input' } = field.formItem;
+            const formProps = {
+              form,
+              record,
+              preview,
+              field,
+              key
+            }
+            if (type === 'hidden') {
+              return require('./model/input').default({ ...formProps, type: 'hidden' })
+            } else {
+              return require(`./model/${type.toLowerCase()}`).default(formProps);
+            }
+          })}
+        </List>
+      );
+    });
+  };
+
   render() {
-    const { columns, record, preview, group, form } = this.props;
+    const { columns, group, form } = this.props;
     let formFields = columns.filter(col => col.formItem);
     if (group) {
       formFields = formFields.filter(
@@ -81,8 +113,7 @@ class FormComp extends React.Component {
     }
 
     return (
-      <form onSubmit={this.onSubmit}>
-      </form>
+      <form onSubmit={this.onSubmit}>{this.renderFormList(formFields)}</form>
     );
   }
 }

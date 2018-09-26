@@ -1,5 +1,5 @@
-import normal from './normal';
-import antdNotice from './antdNotice';
+import normal from './impl/NormalNotice';
+import antdNotice from './impl/AntdNotice';
 
 export { 
   normal, antdNotice

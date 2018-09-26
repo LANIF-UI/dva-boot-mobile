@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import config from '@/config';
+import { notice } from '@/config';
 
 class BaseComponent extends React.Component {
   /**
@@ -10,13 +10,17 @@ class BaseComponent extends React.Component {
     router: PropTypes.object
   };
 
-  notice = config.notice; // 消息通知
-
   /**
    * history api 路由跳转
    */
   get history() { 
     return this.context.router.history;
+  }
+  /**
+   * 消息通知
+   */
+  get notice() {
+    return notice;
   }
 }
 

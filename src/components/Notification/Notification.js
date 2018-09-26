@@ -12,6 +12,8 @@ export default class Notification {
 
   static warn(config) {/* 警告 */}
 
+  static loading() {/* 加载中 */}
+
   static close(key) {/* 关闭 */}
 
   static destroy() {/* 销毁 */}

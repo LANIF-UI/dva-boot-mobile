@@ -102,6 +102,9 @@ export default (model) => {
           const {valueField, notice, actionType, ...otherPayload} = _payloads[i];
 
           try {
+            if (notice) {
+              config.notice.loading();
+            }
             let response = yield call(asyncRequest, otherPayload);
 
             // 自已处理反回的数据，模拟reduce中的操作，这里不要写有副作用的函数
@@ -117,6 +120,7 @@ export default (model) => {
             
             // 如果需要通知功能
             if (notice) {
+              config.notice.close();
               config.notice.success(notice === true ? '操作成功' : notice[0]);
             }
 

@@ -1,0 +1,108 @@
+#pageSys{
+  z-index: 90;
+  background-color: #f9f9f9;
+  .pageSys-container{
+    position: relative;
+    > div{
+      pointer-events: auto;
+    }
+  }
+  .nav-bar-rightContent{
+    flex: 1;
+    text-align: right;
+    height: 100%;
+    align-items: flex-end;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    > i{
+      font-size: 1.4em;
+    }
+  }
+}
+
+.error-page{
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  width: 80%;
+  height: 80%;
+  .error-image{
+    height: 200PX;
+    background: url(./images/roket-error.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+  .error-content{
+    padding: 20PX;
+    border-top: 1PX solid #ccc;
+    margin-top: 20PX;
+    color: #666;
+    display: flex;
+    label{
+      flex: none;
+    }
+    >div{
+      flex: auto;
+      word-break: break-all;
+    }
+  }
+}
+
+.info-page{
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  background-color: #f9f9f9;
+  section {
+    position: absolute;
+    top: 70PX;
+    text-align: center;
+    width: 60%;
+    margin: 0PX auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    .info-image{
+      text-align: left;
+      font-size: 1.6rem;
+      color: #cde7fe;
+    }
+    .info-content{
+      margin-top: 10PX;
+      color: #333;
+      font-size: 16PX;
+      text-align: left;
+      word-break: break-all;
+      border-bottom: 1PX solid #ccc;
+      margin-bottom: 20PX;
+      padding-bottom: 20PX;
+    }
+    > a{
+      border: 1PX solid #ccc;
+      border-radius: 4PX;
+      background: #108ee9;
+      padding: 8PX 30PX;
+      position: absolute;
+      display: block;
+      bottom: 30PX;
+      width: 80%;
+      margin: 0 auto;
+      left: 0;
+      right: 0;
+      color: #fff;
+      box-shadow: 0PX 0PX 2PX #108ee9;
+      i {
+        margin-left: -5PX;
+        margin-right: 10PX;
+      }
+    }
+  }
+}

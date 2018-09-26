@@ -63,7 +63,8 @@ class SearchBox extends Component {
       valueObject[activeField.key] = value;
     }
     this.setState({
-      valueObject
+      valueObject,
+      visibleMenu: false
     });
     if (onSearch) {
       onSearch(valueObject);
