@@ -81,6 +81,7 @@ export default ({ form, record, preview, field, key }) => {
       onErrorClick={e => {
         notice.warn((getFieldError(name) || []).join('，'));
       }}
+      rows={3}
       {...tProps}
     >
       {title}

@@ -1,10 +1,50 @@
+@primary-bg: #03A9F4;
 .basic-layout {
+  &,
+  .antui-pageform {
+    background: @primary-bg;
+    background-image: 
+      linear-gradient(60deg, #01579b 25%, #01579b 25.05%, transparent 0),
+      linear-gradient(350deg, #03a9f4 20%, #03a9f4 20.05%, transparent 0),
+      linear-gradient(125deg, transparent 70%, #039be5 70%, #039be5 75%),
+      linear-gradient(125deg, #0288d1 45%, #03a9f4 45.01%, transparent 0),
+      linear-gradient(125deg, #039be5 70%, #039be5 70.05%, transparent 0);
+  }
   nav{
     text-align: center;
     font-size: 20px;
     font-weight: bold;
     a {
       margin: 6px;
+    }
+  }
+  .am-navbar {
+    background: transparent;
+    color: rgba(255, 255, 255, .8);
+    .am-navbar-left,
+    .am-navbar-right {
+      color: #e1f5fe;
+    }
+    .am-navbar-title{
+      color: #b3e5fc;
+    }
+  }
+  .am-list {
+    .am-list-header {
+      color: #81d4fa
+    }
+  }
+  .am-list-body {
+    background-color: transparent;
+    .am-list-item {
+      background-color: rgba(255, 255, 255, 0.8);
+      .am-input-label,
+      .am-list-content {
+        color: #333;
+      }
+      .am-list-line::after {
+        background-color: rgba(0, 0, 0, 0.1) !important;
+      }
     }
   }
 }

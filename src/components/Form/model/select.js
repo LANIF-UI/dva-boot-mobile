@@ -1,6 +1,5 @@
 import React from 'react';
 import { List } from 'antd-mobile';
-import config from '@/config';
 import { isFunction } from 'cmn-utils/lib/utils';
 const Item = List.Item;
 
@@ -8,7 +7,7 @@ const Item = List.Item;
  * 下拉框元件
  */
 export default ({ form, record, preview, field, key }) => {
-  const { getFieldDecorator, getFieldError } = form;
+  const { getFieldDecorator } = form;
   const { title, name, formItem, dict = [], normalize } = field;
   const {
     type,

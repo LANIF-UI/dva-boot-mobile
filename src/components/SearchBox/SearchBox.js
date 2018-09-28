@@ -1,20 +1,23 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Menu } from 'antd-mobile';
 import SearchBar from '../SearchBar';
+import BaseComponent from '../BaseComponent';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import './style/index.less';
+import Icon from '../Icon';
 
 /**
  * 搜索条，带筛选功能
  */
-class SearchBox extends Component {
+class SearchBox extends BaseComponent {
   static propTypes = {
     columns: PropTypes.array.isRequired
   };
 
   static defaultProps = {
-    prefixCls: 'antui-search-box'
+    prefixCls: 'antui-search-box',
+    goBack: true,
   };
 
   state = {
@@ -74,18 +77,21 @@ class SearchBox extends Component {
   onSubmit = (value, item) => {
     const { valueObject } = this.state;
     const { onSearch } = this.props;
-    valueObject[item.name] = value === "" ? null : value;
+    valueObject[item.name] = value === '' ? null : value;
     if (onSearch) {
       onSearch(valueObject);
     }
-  }
+  };
 
+  goBack = () => {
+    this.history.goBack();
+  };
   renderItems = searchFields => {
     const { activeField, visibleMenu } = this.state;
     return (
       <ul className="dropdown">
         {searchFields.map(field => {
-          const { searchItem, dict, title } = field;
+          const { searchItem, dict = [], title } = field;
           switch (searchItem.type) {
             case 'select':
               return (
@@ -112,21 +118,33 @@ class SearchBox extends Component {
 
   render() {
     const { menuData, visibleMenu, valueObject, activeField } = this.state;
-    const { prefixCls, columns } = this.props;
+    const { prefixCls, columns, goBack } = this.props;
     const classname = cx(prefixCls);
     const searchFields = columns.filter(col => col.searchItem);
-    const primaryField = searchFields.filter(col => col.searchItem.type && col.searchItem.type === 'primary');
+    const primaryField = searchFields.filter(
+      col => col.searchItem.type && col.searchItem.type === 'primary'
+    );
 
+    const GoBack = goBack ? (
+      <div className="goback-btn" onClick={this.goBack}>
+        <Icon type="into" />
+      </div>
+    ) : null;
     return (
       <div className={classname}>
-        {primaryField && primaryField.length ? (
+        {primaryField.length ? (
           <div className="top-search-bar">
-            <SearchBar placeholder={primaryField[0].title} onSubmit={value => this.onSubmit(value, primaryField[0])} />
+            {GoBack}
+            <SearchBar
+              placeholder={primaryField[0].title}
+              onSubmit={value => this.onSubmit(value, primaryField[0])}
+            />
           </div>
         ) : null}
         <div className="search-toolbar">
           <div className="toolbar__left-section">
             <div className="toolbar__filters">
+              {!primaryField.length && GoBack}
               {this.renderItems(searchFields)}
             </div>
           </div>

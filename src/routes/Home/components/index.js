@@ -17,6 +17,7 @@ export default class Home extends BaseComponent {
       <Layout full className="home-page">
         <Content>
           <Grid
+            hasLine={false}
             data={menu}
             columnNum={4}
             renderItem={(item, index) => (

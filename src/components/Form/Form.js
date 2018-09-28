@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { List } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import { splitColumns } from './util';
+import cx from 'classnames';
 import './style/index.less';
 
 /**
@@ -92,8 +93,8 @@ class FormComp extends React.Component {
               field,
               key
             }
-            if (type === 'hidden') {
-              return require('./model/input').default({ ...formProps, type: 'hidden' })
+            if (type === 'hidden' || type === 'textarea') {
+              return require('./model/input').default({ ...formProps, type })
             } else {
               return require(`./model/${type.toLowerCase()}`).default(formProps);
             }
@@ -104,7 +105,7 @@ class FormComp extends React.Component {
   };
 
   render() {
-    const { columns, group, form } = this.props;
+    const { prefixCls, className, columns, group, form } = this.props;
     let formFields = columns.filter(col => col.formItem);
     if (group) {
       formFields = formFields.filter(
@@ -113,7 +114,7 @@ class FormComp extends React.Component {
     }
 
     return (
-      <form onSubmit={this.onSubmit}>{this.renderFormList(formFields)}</form>
+      <form className={cx(prefixCls, className)} onSubmit={this.onSubmit}>{this.renderFormList(formFields)}</form>
     );
   }
 }

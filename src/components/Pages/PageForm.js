@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, NavBar } from 'antd-mobile';
+import { NavBar } from 'antd-mobile';
 import Form from '../Form';
 import Layout from '../Layout';
 import cx from 'classnames';
@@ -67,8 +67,7 @@ class PageForm extends Component {
       <Layout className={classname} full>
         <Header>
           <NavBar
-            icon={<Icon type="left" />}
-            leftContent="返回"
+            leftContent="取消"
             onLeftClick={onCancel}
             rightContent={
               <div className="nav-bar-rightContent" onClick={this.onSubmit}>

@@ -214,7 +214,7 @@ const Loading = () => (
       <div className="dot left three" />
       <div className="dot left two" />
       <div className="dot left one" />
-      <i className="text">加载中</i>
+      <i className="text dot"></i>
       <div className="dot right one" />
       <div className="dot right two" />
       <div className="dot right three" />

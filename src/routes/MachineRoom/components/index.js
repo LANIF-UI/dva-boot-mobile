@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
 import Layout from 'components/Layout';
 import BaseComponent from 'components/BaseComponent';
 import SearchBox from 'components/SearchBox';
@@ -57,7 +58,7 @@ export default class extends BaseComponent {
   };
 
   render() {
-    const { machineRoom, dispatch } = this.props;
+    const { dispatch } = this.props;
     const { selectType, dataSource, visible } = this.state;
     const { record } = this.state;
     const pageFormProps = {
@@ -84,7 +85,7 @@ export default class extends BaseComponent {
           success: () => {
             this.setState({
               record: null,
-              visible: false,
+              visible: false
             });
           }
         });
@@ -94,7 +95,7 @@ export default class extends BaseComponent {
     return (
       <Layout full className="machineRoom-page">
         <Header>
-          <SearchBox columns={columns} onSearch={this.onSearch} />
+          <SearchBox goBack columns={columns} onSearch={this.onSearch} />
         </Header>
         <Content>
           <DataList

@@ -58,17 +58,17 @@ export default ({fetchMock, delay, mock, toSuccess, toError}) => {
       },
       {
         name: '设备巡检',
-        icon: 'home',
-        path: '/device',
+        icon: 'ruby',
+        path: '/deviceCheck',
       },
       {
         name: '巡检日历',
-        icon: 'home',
+        icon: 'ring',
         path: '/calender',
       },
       {
         name: '常用联系人',
-        icon: 'home',
+        icon: 'users',
         path: '/contact',
       },
     ], 400)

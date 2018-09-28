@@ -7,31 +7,52 @@
   & > .top-search-bar {
     position: relative;
     z-index: 90;
+    display: flex;
+    align-items: center;
+  }
+  .goback-btn {
+    height: 44px;
+    flex: none;
+    display: flex;
+    padding-left: 10px;
+    align-items: center;
+    > * {
+      transform: rotate(180deg);
+      color: rgba(0, 0, 0, 0.3);
+      font-size: 18px;
+    }
   }
   & > .search-toolbar {
     position: relative;
+    overflow: hidden;
     z-index: 90;
-    .hairline('top');
-    .hairline('bottom');
-    background-color: #fff;
+    .hairline('top', rgba(0, 0, 0, 0.1));
+    .hairline('bottom', rgba(0, 0, 0, 0.1));
+    background-color: #e1f5fe; //rgba(255, 255, 255, .7);
     display: flex;
     justify-content: space-between;
     .toolbar__filters {
-      background-color: #fff;
+      display: flex;
+      flex: auto;
+      overflow: hidden;
+      .goback-btn {
+        flex: none;
+      }
     }
     .toolbar__left-section {
       display: flex;
+      overflow: hidden;
       flex: auto;
-      overflow-y: hidden;
-      overflow-x: auto;
     }
     .toolbar__right-section {
       display: flex;
       flex: none;
       align-items: center;
+      box-shadow: -12px 0 20px 4px #e1f5fe;
+      z-index: 1;
       .dropdown__trigger {
         position: relative;
-        .hairline('left');
+        .hairline('left', #eee);
       }
       .button {
         margin-right: 1.1rem;
@@ -39,24 +60,25 @@
     }
     .dropdown {
       list-style-type: none;
+      flex: auto;
       display: flex;
-      float: left;
+      overflow: auto;
       padding: 0;
       margin: 0;
       color: #333;
       > li {
         height: 44px;
-        line-height: 44px;
+        display: flex;
+        align-items: center;
       }
       .dropdown__trigger {
-        display: inline-block;
         padding: 0 2rem 0rem 1rem;
         transition: background-color 0.2s ease;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         &:after {
-          content: "";
+          content: '';
           display: inline-block;
           width: 6px;
           height: 6px;
@@ -70,7 +92,7 @@
         }
         &:active,
         &.active {
-          color: #2196f3;
+          color: rgba(0, 0, 0, 0.3);
         }
       }
     }
@@ -80,6 +102,7 @@
     z-index: 90;
     width: 100%;
     height: auto !important;
+    max-height: 50vh;
   }
   
   .menu-mask {
