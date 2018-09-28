@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
 import Layout from 'components/Layout';
 import BaseComponent from 'components/BaseComponent';
 import SearchBox from 'components/SearchBox';
