@@ -17,7 +17,7 @@ class SearchBox extends BaseComponent {
 
   static defaultProps = {
     prefixCls: 'antui-search-box',
-    goBack: true,
+    goBack: true
   };
 
   state = {
@@ -60,7 +60,9 @@ class SearchBox extends BaseComponent {
     const { onSearch } = this.props;
     const { activeField, valueObject } = this.state;
     const { type } = activeField.field.searchItem;
-    if (type === 'select') {
+    if (value[0] === '') {
+      delete valueObject[activeField.key];
+    } else if (type === 'select') {
       valueObject[activeField.key] = value[0];
     } else {
       valueObject[activeField.key] = value;
@@ -87,7 +89,7 @@ class SearchBox extends BaseComponent {
     this.history.goBack();
   };
   renderItems = searchFields => {
-    const { activeField, visibleMenu } = this.state;
+    const { activeField, visibleMenu, valueObject } = this.state;
     return (
       <ul className="dropdown">
         {searchFields.map(field => {
@@ -104,7 +106,11 @@ class SearchBox extends BaseComponent {
                       active: activeField.key === field.name && visibleMenu
                     })}
                   >
-                    {title}
+                    {valueObject[field.name]
+                      ? dict.filter(
+                          item => item.code === valueObject[field.name]
+                        )[0].codeName
+                      : title}
                   </div>
                 </li>
               );
@@ -118,7 +124,7 @@ class SearchBox extends BaseComponent {
 
   render() {
     const { menuData, visibleMenu, valueObject, activeField } = this.state;
-    const { prefixCls, columns, goBack } = this.props;
+    const { prefixCls, columns, goBack, action } = this.props;
     const classname = cx(prefixCls);
     const searchFields = columns.filter(col => col.searchItem);
     const primaryField = searchFields.filter(
@@ -130,6 +136,7 @@ class SearchBox extends BaseComponent {
         <Icon type="into" />
       </div>
     ) : null;
+    const menuValue = valueObject[activeField.key];
     return (
       <div className={classname}>
         {primaryField.length ? (
@@ -148,20 +155,16 @@ class SearchBox extends BaseComponent {
               {this.renderItems(searchFields)}
             </div>
           </div>
-          <div className="toolbar__right-section">
-            <ul className="dropdown">
-              <li>
-                <div className="dropdown__trigger">操作</div>
-              </li>
-            </ul>
-          </div>
+          {action ? (
+            <div className="toolbar__right-section">{action}</div>
+          ) : null}
         </div>
         {visibleMenu ? (
           <Menu
             className="search-box-dropdown"
             data={menuData}
             level={1}
-            value={valueObject[activeField.key]}
+            value={Array.isArray(menuValue) ? menuValue : [menuValue]}
             onChange={this.onChangeSelect}
           />
         ) : null}

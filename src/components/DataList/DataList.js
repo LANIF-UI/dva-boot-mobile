@@ -38,6 +38,10 @@ class DataList extends Component {
      */
     onChange: PropTypes.func,
     /**
+     * 点击列表项
+     */
+    onClick: PropTypes.func,
+    /**
      * 从第几页开始
      */
     pageStart: PropTypes.number,
@@ -88,7 +92,8 @@ class DataList extends Component {
         dataSource.startPage(pageStart, pageSize) ||
         PageHelper.create(pageStart, pageSize),
       loading: false,
-      hasMore: true
+      hasMore: true,
+      checkedKeys: [],
     };
   }
 
@@ -100,7 +105,7 @@ class DataList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { dataSource } = nextProps;
+    const { dataSource, selectType } = nextProps;
     if (this.props.dataSource !== dataSource) {
       if (dataSource) {
         this.setState({
@@ -109,6 +114,11 @@ class DataList extends Component {
           this.onLoaderMore(true);
         })
       }
+    }
+    if (this.props.selectType !== selectType) {
+      this.setState({
+        checkedKeys: []
+      })
     }
   }
 
@@ -141,13 +151,26 @@ class DataList extends Component {
     }
   };
 
+  onCheckedChange = item => {
+    let { checkedKeys } = this.state;
+    const { rowKey, onChange } = this.props;
+    if (checkedKeys.some(key => key === item[rowKey])) {
+      checkedKeys = checkedKeys.filter(key => key !== item[rowKey]);
+    } else {
+      checkedKeys.push(item[rowKey]);
+    }
+    onChange && onChange(checkedKeys);
+    this.setState({
+      checkedKeys
+    })
+  }
   renderItem = item => {
     const {
       renderItem,
       rowKey,
       titleKey,
       selectType,
-      onChange,
+      onClick,
       render,
       arrow
     } = this.props;
@@ -158,7 +181,7 @@ class DataList extends Component {
       return (
         <CheckboxItem
           key={item[rowKey]}
-          onChange={onChange ? () => onChange(item) : null}
+          onChange={() => this.onCheckedChange(item)}
         >
           {render ? render(item) : item[titleKey]}
         </CheckboxItem>
@@ -168,7 +191,7 @@ class DataList extends Component {
       return (
         <ListItem
           key={item[rowKey]}
-          onClick={onChange ? () => onChange(item) : null}
+          onClick={onClick ? () => onClick(item) : () => {}}
           arrow={arrow === false ? false : 'horizontal'}
         >
           {render ? render(item) : item[titleKey]}
