@@ -124,9 +124,9 @@ class DataList extends Component {
 
   onLoaderMore = async isReload => {
     const { loadData } = this.props;
-    const { dataSource, dataList } = this.state;
+    const { dataSource, dataList, hasMore } = this.state;
 
-    if (loadData) {
+    if (loadData && hasMore) {
       this.setState({
         loading: true,
         hasMore: true
