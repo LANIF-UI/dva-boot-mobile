@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu } from 'antd-mobile';
+import { Menu, Picker } from 'antd-mobile';
 import SearchBar from '../SearchBar';
 import BaseComponent from '../BaseComponent';
 import cx from 'classnames';
@@ -49,6 +49,22 @@ class SearchBox extends BaseComponent {
     });
   };
 
+  onVisibleChange = (visible, field) => {
+    let { activeField } = this.state;
+    const { name } = field;
+
+    if (visible) {
+      activeField.key = name;
+      activeField.field = field;
+    } else {
+      activeField = {};
+    }
+
+    this.setState({
+      activeField
+    });
+  };
+
   onMaskClick = () => {
     this.setState({
       menuData: [],
@@ -88,6 +104,7 @@ class SearchBox extends BaseComponent {
   goBack = () => {
     this.history.goBack();
   };
+
   renderItems = searchFields => {
     const { activeField, visibleMenu, valueObject } = this.state;
     return (
@@ -114,6 +131,29 @@ class SearchBox extends BaseComponent {
                   </div>
                 </li>
               );
+            case 'picker':
+              return (
+                <Picker
+                  key={field.name}
+                  data={searchItem.data}
+                  title={title}
+                  value={this.state[field.name]}
+                  onChange={v => this.setState({ [field.name]: v })}
+                  onVisibleChange={visible =>
+                    this.onVisibleChange(visible, field)
+                  }
+                  onOk={this.onChangeSelect}
+                  {...searchItem}
+                >
+                  <div
+                    className={cx('dropdown__trigger', 'li-list', {
+                      active: activeField.key === field.name && visibleMenu
+                    })}
+                  >
+                    {title}
+                  </div>
+                </Picker>
+              );
             default:
               return null;
           }
@@ -136,7 +176,9 @@ class SearchBox extends BaseComponent {
         <Icon type="into" />
       </div>
     ) : null;
+
     const menuValue = valueObject[activeField.key];
+
     return (
       <div className={classname}>
         {primaryField.length ? (

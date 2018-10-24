@@ -1,14 +1,14 @@
 import React from 'react';
-import { List } from 'antd-mobile';
+import { List, Picker } from 'antd-mobile';
 import { isFunction } from 'cmn-utils/lib/utils';
 const Item = List.Item;
 
 /**
- * 下拉框元件
+ * 选择器元件
  */
 export default ({ form, record, preview, field, key }) => {
   const { getFieldDecorator } = form;
-  const { title, name, formItem, dict = [], normalize } = field;
+  const { title, name, formItem, dataSource = [], normalize } = field;
   const {
     type,
     initialValue,
@@ -33,8 +33,6 @@ export default ({ form, record, preview, field, key }) => {
     } else {
       options.initialValue = initval;
     }
-  } else if (dict.length) {
-    options.initialValue = dict[0].code;
   }
 
   if (preview) {
@@ -71,25 +69,13 @@ export default ({ form, record, preview, field, key }) => {
     ...otherProps
   };
 
-  return (
-    <div key={key} className="am-list-item am-list-item-middle">
-      <div className="am-list-line">
-        <div className={'am-input-label am-input-label-' + labelNumber}>
-          {title}
-        </div>
-        <div className="am-input-control">
-          {getFieldDecorator(name, options)(
-            <select {...tProps}>
-              {dict.map((item, i) => (
-                <option key={item.code} value={item.code}>
-                  {item.codeName}
-                </option>
-              ))}
-            </select>
-          )}
-        </div>
-        <div className="am-list-arrow am-list-arrow-horizontal" />
-      </div>
-    </div>
+  return getFieldDecorator(name, options)(
+    <Picker
+      data={dataSource}
+      title={title}
+      {...tProps}
+    >
+      <List.Item arrow="horizontal">{title}</List.Item>
+    </Picker>
   );
 };

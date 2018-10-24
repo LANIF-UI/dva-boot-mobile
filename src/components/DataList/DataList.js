@@ -5,6 +5,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 import { List, Checkbox } from 'antd-mobile';
 import assign from 'object-assign';
 import PageHelper from '@/utils/pageHelper';
+import NotData from './NotData';
 import './style/index.less';
 const CheckboxItem = Checkbox.CheckboxItem;
 const ListItem = List.Item;
@@ -88,12 +89,11 @@ class DataList extends Component {
 
     this.state = {
       dataList: dataSource ? dataSource.list : [],
-      dataSource:
-        dataSource.startPage(pageStart, pageSize) ||
-        PageHelper.create(pageStart, pageSize),
+      dataSource: dataSource || PageHelper.create(pageStart, pageSize),
       loading: false,
       hasMore: true,
       checkedKeys: [],
+      checkedRows: []
     };
   }
 
@@ -108,17 +108,22 @@ class DataList extends Component {
     const { dataSource, selectType } = nextProps;
     if (this.props.dataSource !== dataSource) {
       if (dataSource) {
-        this.setState({
-          dataSource
-        }, () => {
+        this.setState(
+          {
+            dataSource,
+            hasMore: true
+          },
+          () => {
           this.onLoaderMore(true);
-        })
+          }
+        );
       }
     }
     if (this.props.selectType !== selectType) {
       this.setState({
-        checkedKeys: []
-      })
+        checkedKeys: [],
+        checkedRows: []
+      });
     }
   }
 
@@ -129,7 +134,7 @@ class DataList extends Component {
     if (loadData && hasMore) {
       this.setState({
         loading: true,
-        hasMore: true
+        hasMore
       });
 
       const newDataSource = await loadData(dataSource.nextPage());
@@ -152,18 +157,21 @@ class DataList extends Component {
   };
 
   onCheckedChange = item => {
-    let { checkedKeys } = this.state;
+    let { checkedKeys, checkedRows } = this.state;
     const { rowKey, onChange } = this.props;
     if (checkedKeys.some(key => key === item[rowKey])) {
       checkedKeys = checkedKeys.filter(key => key !== item[rowKey]);
+      checkedRows = checkedRows.filter(jtem => jtem[rowKey] !== item[rowKey]);
     } else {
       checkedKeys.push(item[rowKey]);
+      checkedRows.push(item);
     }
-    onChange && onChange(checkedKeys);
+    onChange && onChange(checkedKeys, checkedRows);
     this.setState({
-      checkedKeys
-    })
-  }
+      checkedKeys,
+      checkedRows
+    });
+  };
   renderItem = item => {
     const {
       renderItem,
@@ -224,6 +232,7 @@ class DataList extends Component {
           {dataList.map(item => this.renderItem(item))}
           {loading && hasMore && <Loading />}
         </List>
+        {!dataList.length && !loading && !hasMore && <NotData />}
       </InfiniteScroll>
     );
   }
@@ -237,7 +246,7 @@ const Loading = () => (
       <div className="dot left three" />
       <div className="dot left two" />
       <div className="dot left one" />
-      <i className="text dot"></i>
+      <i className="text dot" />
       <div className="dot right one" />
       <div className="dot right two" />
       <div className="dot right three" />
@@ -247,7 +256,7 @@ const Loading = () => (
 /**
  * 操作区 阻止向上冒泡
  */
-const Oper = (prop) => (
+const Oper = prop => (
   <div className="datalist-row-button" onClick={e => e.stopPropagation()}>
     {prop.children}
   </div>
